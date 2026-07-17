@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RHOPE — Experiência de rolagem</title>
+<meta name="description" content="Landing page com transições contínuas de vídeo/imagem entre seções ao rolar." />
+<link rel="icon" href="data:," />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Indicador de progresso / navegação por pontos -->
+  <nav class="dots" aria-label="Navegação entre seções">
+    <button class="dot" data-target="0" aria-label="Ir para Início"></button>
+    <button class="dot" data-target="1" aria-label="Ir para O problema"></button>
+    <button class="dot" data-target="2" aria-label="Ir para A solução"></button>
+    <button class="dot" data-target="3" aria-label="Ir para Prova social"></button>
+    <button class="dot" data-target="4" aria-label="Ir para Chamada final"></button>
+  </nav>
+
+  <!-- Camadas de fundo (fixas, cross-fade controlado por scroll) -->
+  <div class="bg-stack" aria-hidden="true">
+
+    <div class="bg-layer" data-index="0">
+      <img class="bg-media" src="assets/placeholders/section-1.svg" alt="" />
+      <!-- Para usar vídeo real, troque o <img> acima por:
+      <video class="bg-media" autoplay muted loop playsinline preload="none"
+             poster="assets/placeholders/section-1.svg" data-video>
+        <source src="assets/videos/section-1.mp4" type="video/mp4">
+      </video>
+      -->
+      <div class="bg-overlay"></div>
+    </div>
+
+    <div class="bg-layer" data-index="1">
+      <img class="bg-media" src="assets/placeholders/section-2.svg" alt="" />
+      <div class="bg-overlay"></div>
+    </div>
+
+    <div class="bg-layer" data-index="2">
+      <img class="bg-media" src="assets/placeholders/section-3.svg" alt="" />
+      <div class="bg-overlay"></div>
+    </div>
+
+    <div class="bg-layer" data-index="3">
+      <img class="bg-media" src="assets/placeholders/section-4.svg" alt="" />
+      <div class="bg-overlay"></div>
+    </div>
+
+    <div class="bg-layer" data-index="4">
+      <img class="bg-media" src="assets/placeholders/section-5.svg" alt="" />
+      <div class="bg-overlay"></div>
+    </div>
+
+  </div>
+
+  <!-- Conteúdo em primeiro plano, rola normalmente -->
+  <main class="stage">
+
+    <section class="panel" id="panel-0" data-index="0">
+      <div class="panel-inner">
+        <p class="eyebrow">RHOPE</p>
+        <h1 class="headline">Título de impacto entra aqui</h1>
+        <p class="subline">Uma frase curta que resume a proposta de valor. [Substitua pelo texto real.]</p>
+        <a class="cta" href="#panel-4">Começar agora</a>
+      </div>
+      <div class="scroll-cue" aria-hidden="true">
+        <span></span>
+        role para explorar
+      </div>
+    </section>
+
+    <section class="panel" id="panel-1" data-index="1">
+      <div class="panel-inner">
+        <p class="eyebrow">01 — O problema</p>
+        <h2 class="headline">Descreva a dor do seu cliente aqui</h2>
+        <p class="subline">Um parágrafo curto explicando o problema que a RHOPE resolve. [Substitua pelo texto real.]</p>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-2" data-index="2">
+      <div class="panel-inner">
+        <p class="eyebrow">02 — A solução</p>
+        <h2 class="headline">Apresente o diferencial do produto</h2>
+        <p class="subline">Destaque o benefício principal em uma frase objetiva. [Substitua pelo texto real.]</p>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-3" data-index="3">
+      <div class="panel-inner">
+        <p class="eyebrow">03 — Prova social</p>
+        <h2 class="headline">"Um depoimento forte entra aqui."</h2>
+        <p class="subline">Nome do cliente, cargo e empresa. [Substitua por um caso real.]</p>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-4" data-index="4">
+      <div class="panel-inner">
+        <p class="eyebrow">Vamos conversar</p>
+        <h2 class="headline">Pronto para começar?</h2>
+        <p class="subline">Uma última frase de incentivo antes do botão. [Substitua pelo texto real.]</p>
+        <a class="cta" href="#">Falar com a equipe</a>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
