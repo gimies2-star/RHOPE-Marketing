@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>RHOPE — Experiência de rolagem</title>
-<meta name="description" content="Landing page com transições contínuas de vídeo/imagem entre seções ao rolar." />
+<title>MoveAI — Aula Gratuita de Automação Inteligente</title>
+<meta name="description" content="Descubra como a automação inteligente pode transformar o seu negócio. Aula gratuita do MoveAI." />
 <link rel="icon" href="data:," />
 <link rel="stylesheet" href="styles.css" />
 </head>
@@ -14,43 +14,49 @@
   <nav class="dots" aria-label="Navegação entre seções">
     <button class="dot" data-target="0" aria-label="Ir para Início"></button>
     <button class="dot" data-target="1" aria-label="Ir para O problema"></button>
-    <button class="dot" data-target="2" aria-label="Ir para A solução"></button>
-    <button class="dot" data-target="3" aria-label="Ir para Prova social"></button>
-    <button class="dot" data-target="4" aria-label="Ir para Chamada final"></button>
+    <button class="dot" data-target="2" aria-label="Ir para Por que agora"></button>
+    <button class="dot" data-target="3" aria-label="Ir para O que você vai aprender"></button>
+    <button class="dot" data-target="4" aria-label="Ir para Garantir vaga"></button>
   </nav>
 
   <!-- Camadas de fundo (fixas, cross-fade controlado por scroll) -->
   <div class="bg-stack" aria-hidden="true">
 
     <div class="bg-layer" data-index="0">
-      <img class="bg-media" src="assets/placeholders/section-1.svg" alt="" />
-      <!-- Para usar vídeo real, troque o <img> acima por:
-      <video class="bg-media" autoplay muted loop playsinline preload="none"
-             poster="assets/placeholders/section-1.svg" data-video>
-        <source src="assets/videos/section-1.mp4" type="video/mp4">
+      <video class="bg-media" autoplay muted loop playsinline preload="auto"
+             poster="assets/images/posters/moveai-promo.jpg" data-video>
+        <source src="assets/videos/moveai-promo.mp4" type="video/mp4">
       </video>
-      -->
       <div class="bg-overlay"></div>
     </div>
 
     <div class="bg-layer" data-index="1">
-      <img class="bg-media" src="assets/placeholders/section-2.svg" alt="" />
+      <video class="bg-media" muted loop playsinline preload="none"
+             poster="assets/images/posters/story1.jpg" data-video>
+        <source src="assets/videos/story1.mp4" type="video/mp4">
+      </video>
       <div class="bg-overlay"></div>
     </div>
 
     <div class="bg-layer" data-index="2">
-      <img class="bg-media" src="assets/placeholders/section-3.svg" alt="" />
+      <video class="bg-media" muted loop playsinline preload="none"
+             poster="assets/images/posters/story2.jpg" data-video>
+        <source src="assets/videos/story2.mp4" type="video/mp4">
+      </video>
       <div class="bg-overlay"></div>
     </div>
 
     <div class="bg-layer" data-index="3">
-      <img class="bg-media" src="assets/placeholders/section-4.svg" alt="" />
+      <video class="bg-media" muted loop playsinline preload="none"
+             poster="assets/images/posters/story3.jpg" data-video>
+        <source src="assets/videos/story3.mp4" type="video/mp4">
+      </video>
       <div class="bg-overlay"></div>
     </div>
 
     <div class="bg-layer" data-index="4">
-      <img class="bg-media" src="assets/placeholders/section-5.svg" alt="" />
-      <div class="bg-overlay"></div>
+      <img class="bg-media bg-media--contain" src="assets/images/moveai-flyer.png" alt="Flyer da Aula Gratuita do MoveAI" />
+      <div class="bg-overlay bg-overlay--solid"></div>
     </div>
 
   </div>
@@ -60,10 +66,10 @@
 
     <section class="panel" id="panel-0" data-index="0">
       <div class="panel-inner">
-        <p class="eyebrow">RHOPE</p>
-        <h1 class="headline">Título de impacto entra aqui</h1>
-        <p class="subline">Uma frase curta que resume a proposta de valor. [Substitua pelo texto real.]</p>
-        <a class="cta" href="#panel-4">Começar agora</a>
+        <p class="eyebrow">MoveAI · Automação inteligente</p>
+        <h1 class="headline">Aula gratuita do MoveAI</h1>
+        <p class="subline">Descubra como a automação inteligente pode transformar o seu negócio.</p>
+        <a class="cta" href="https://wa.me/5535992733296" target="_blank" rel="noopener">Quero participar</a>
       </div>
       <div class="scroll-cue" aria-hidden="true">
         <span></span>
@@ -74,33 +80,39 @@
     <section class="panel" id="panel-1" data-index="1">
       <div class="panel-inner">
         <p class="eyebrow">01 — O problema</p>
-        <h2 class="headline">Descreva a dor do seu cliente aqui</h2>
-        <p class="subline">Um parágrafo curto explicando o problema que a RHOPE resolve. [Substitua pelo texto real.]</p>
+        <h2 class="headline">Nunca tivemos tanta informação — e retemos menos</h2>
+        <p class="subline">Sente que está cada vez mais difícil acompanhar tudo o que a IA está mudando no seu mercado?</p>
       </div>
     </section>
 
     <section class="panel" id="panel-2" data-index="2">
       <div class="panel-inner">
-        <p class="eyebrow">02 — A solução</p>
-        <h2 class="headline">Apresente o diferencial do produto</h2>
-        <p class="subline">Destaque o benefício principal em uma frase objetiva. [Substitua pelo texto real.]</p>
+        <p class="eyebrow">02 — Por que agora</p>
+        <h2 class="headline">O maior risco de ignorar a IA hoje não é o que você pensa</h2>
+        <p class="subline">Enquanto a maioria só pergunta, poucos estão construindo. Ainda dá tempo de virar o jogo.</p>
       </div>
     </section>
 
     <section class="panel" id="panel-3" data-index="3">
       <div class="panel-inner">
-        <p class="eyebrow">03 — Prova social</p>
-        <h2 class="headline">"Um depoimento forte entra aqui."</h2>
-        <p class="subline">Nome do cliente, cargo e empresa. [Substitua por um caso real.]</p>
+        <p class="eyebrow">03 — O que você vai aprender</p>
+        <h2 class="headline">Se torne maestro da IA — não substituído por ela</h2>
+        <ul class="feature-list">
+          <li>E-mails automáticos</li>
+          <li>Construção de agentes</li>
+          <li>Automatização de relatórios</li>
+          <li>Organização de arquivos</li>
+        </ul>
       </div>
     </section>
 
     <section class="panel" id="panel-4" data-index="4">
       <div class="panel-inner">
-        <p class="eyebrow">Vamos conversar</p>
-        <h2 class="headline">Pronto para começar?</h2>
-        <p class="subline">Uma última frase de incentivo antes do botão. [Substitua pelo texto real.]</p>
-        <a class="cta" href="#">Falar com a equipe</a>
+        <p class="eyebrow">Vagas limitadas</p>
+        <h2 class="headline">Garanta sua vaga — sábado 18/07 às 14h</h2>
+        <p class="subline">3ª turma, via Google Meet. Vamos explorar ChatGPT, Claude, Gemini, Copilot, Perplexity, Grok e Mistral AI. Bônus e prêmios de participação.</p>
+        <a class="cta" href="https://wa.me/5535992733296" target="_blank" rel="noopener">Falar no WhatsApp</a>
+        <p class="social">Acompanhe: @rhopeanunciosonline · @gianesperanca_</p>
       </div>
     </section>
 

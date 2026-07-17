@@ -1,9 +1,9 @@
 :root {
-  --bg: #05060a;
+  --bg: #0a0a0a;
   --fg: #f4f6fb;
-  --muted: #aab2c5;
-  --accent: #3fd0c9;
-  --overlay: rgba(5, 6, 10, 0.35);
+  --muted: #c9c2ba;
+  --accent: #ff5e1f;
+  --overlay: rgba(10, 8, 6, 0.35);
   --panel-max: 720px;
 }
 
@@ -49,17 +49,36 @@ body {
   height: 100%;
   object-fit: cover;
   display: block;
+  background: #0a0a0a;
+}
+
+.bg-media--contain {
+  width: 55%;
+  margin-left: auto;
+  object-fit: contain;
+  padding: 4vh 3vw;
 }
 
 .bg-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(5, 6, 10, 0.25) 0%,
-    rgba(5, 6, 10, 0.55) 70%,
-    rgba(5, 6, 10, 0.85) 100%
-  );
+  background:
+    linear-gradient(
+      90deg,
+      rgba(10, 8, 6, 0.75) 0%,
+      rgba(10, 8, 6, 0.35) 45%,
+      rgba(10, 8, 6, 0.1) 65%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(10, 8, 6, 0.35) 0%,
+      rgba(10, 8, 6, 0.6) 70%,
+      rgba(10, 8, 6, 0.88) 100%
+    );
+}
+
+.bg-overlay--solid {
+  background: rgba(5, 4, 3, 0.6);
 }
 
 /* ---------- Conteúdo em primeiro plano ---------- */
@@ -70,6 +89,7 @@ body {
 }
 
 .panel {
+  position: relative;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -130,7 +150,41 @@ body {
 
 .cta:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(63, 208, 201, 0.35);
+  box-shadow: 0 12px 30px rgba(255, 94, 31, 0.4);
+}
+
+.feature-list {
+  list-style: none;
+  margin: 0 0 2rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.feature-list li {
+  font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+  font-weight: 600;
+  padding-left: 1.6rem;
+  position: relative;
+}
+
+.feature-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.social {
+  margin-top: 1.5rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  color: var(--muted);
 }
 
 /* ---------- Indicador "role para explorar" ---------- */
@@ -215,4 +269,5 @@ body {
 @media (max-width: 640px) {
   .dots { display: none; }
   .panel { padding: 6vh 6vw; }
+  .bg-media--contain { width: 100%; opacity: 0.35; }
 }
