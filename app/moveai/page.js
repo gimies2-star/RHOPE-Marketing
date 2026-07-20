@@ -10,38 +10,83 @@ const BG = '#0A0A0A';
 const EVENT_DATE = new Date('2026-07-24T19:30:00-03:00');
 const WHATSAPP_LINK = 'https://wa.me/message';
 
-function useReveal() {
+// Opacity/position tracks scroll continuously (no on/off snap) — same mechanic measured
+// in the omni.chat reference: elements fade in gradually as they approach viewport-center,
+// scrubbed frame-by-frame off scroll position instead of toggling once via IntersectionObserver.
+function useScrollProgress(startVH = 0.88, endVH = 0.55) {
   const ref = useRef(null);
-  const [visible, setVisible] = useState(false);
+  const [progress, setProgress] = useState(0);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          obs.unobserve(el);
-        }
-      },
-      { threshold: 0.18 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
-  return [ref, visible];
+    let ticking = false;
+    const compute = () => {
+      const rect = el.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const start = vh * startVH;
+      const end = vh * endVH;
+      const p = (start - rect.top) / (start - end);
+      setProgress(Math.max(0, Math.min(1, p)));
+      ticking = false;
+    };
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        window.requestAnimationFrame(compute);
+      }
+    };
+    compute();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, [startVH, endVH]);
+  return [ref, progress];
 }
 
-function Reveal({ as: Tag = 'div', delay = 0, className = '', style = {}, children }) {
-  const [ref, visible] = useReveal();
+function ScrollFade({ as: Tag = 'div', offset = 0, className = '', style = {}, children }) {
+  const [ref, progress] = useScrollProgress(0.9 - offset, 0.52 - offset);
   return (
     <Tag
       ref={ref}
-      className={`reveal ${visible ? 'reveal--visible' : ''} ${className}`}
-      style={{ ...style, transitionDelay: `${delay}ms` }}
+      className={className}
+      style={{
+        ...style,
+        opacity: progress,
+        transform: `translateY(${(1 - progress) * 26}px)`,
+      }}
     >
       {children}
     </Tag>
   );
+}
+
+// Starts/stops a timer only while the ref is on screen — drives the pinned carousel below.
+function useAutoAdvance(count, intervalMs = 1800) {
+  const ref = useRef(null);
+  const [index, setIndex] = useState(0);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    let id = null;
+    const start = () => {
+      if (id) return;
+      id = setInterval(() => setIndex(i => (i + 1) % count), intervalMs);
+    };
+    const stop = () => {
+      if (id) clearInterval(id);
+      id = null;
+    };
+    const obs = new IntersectionObserver(([entry]) => (entry.isIntersecting ? start() : stop()), { threshold: 0.4 });
+    obs.observe(el);
+    return () => {
+      stop();
+      obs.disconnect();
+    };
+  }, [count, intervalMs]);
+  return [ref, index, setIndex];
 }
 
 function useCountdown(target) {
@@ -97,6 +142,8 @@ const VALUE_PROPS = [
     text: 'Ela executa a tarefa inteira sozinha. É isso que separa quem usa IA de quem só conversa com ela.',
   },
 ];
+
+const ORBIT_ITEMS = ['PESQUISAR', 'COMPARAR', 'ORGANIZAR', 'MONITORAR', 'EXECUTAR'];
 
 const pad = n => String(n).padStart(2, '0');
 
@@ -201,42 +248,40 @@ export default function MoveAIPage() {
         </div>
       </div>
 
-      {/* VALUE PROPS */}
+      {/* VALUE PROPS — pinned, auto-advancing carousel (mirrors the sticky card-swap found in the reference) */}
       <section style={styles.section}>
-        <Reveal className="revealBlock">
+        <ScrollFade>
           <div style={styles.sectionLabel}>A DIFERENÇA QUE MUDA TUDO</div>
           <h2 style={styles.h2}>
             <span style={{ color: CREAM }}>VOCÊ VAI ENTENDER A DIFERENÇA ENTRE </span>
             <span style={{ color: ORANGE }}>PERGUNTAR, DELEGAR E AUTOMATIZAR</span>
           </h2>
-        </Reveal>
+        </ScrollFade>
 
-        <div className="cardsGrid" style={styles.cardsGrid}>
-          {VALUE_PROPS.map((v, i) => (
-            <Reveal key={v.title} delay={i * 110} className="card">
-              <div style={styles.card}>
-                <div style={styles.cardIndex}>{pad(i + 1)}</div>
-                <div style={styles.cardTitle}>{v.title}</div>
-                <div style={styles.cardText}>{v.text}</div>
-              </div>
-            </Reveal>
-          ))}
-        </div>
+        <ValueCarousel />
 
-        <Reveal delay={120}>
+        <ScrollFade offset={0.1}>
           <div style={styles.bonusBox}>
             <div style={styles.bonusLabel}>// BÔNUS · CERTIFICADO</div>
             <div style={styles.bonusText}>
-              Cada um dos 3 dias libera uma palavra-chave. Junte as três e destrave seu
-              certificado de participação no dia 29/07.
+              Cada um dos 3 dias libera uma palavra-chave. Junte as três e destrave seu{' '}
+              <strong style={{ color: CREAM }}>certificado de participação</strong> no dia 29/07.
             </div>
           </div>
-        </Reveal>
+        </ScrollFade>
+      </section>
+
+      {/* ORBIT — always-on rotation, independent of scroll (mirrors the integrations orbit found in the reference) */}
+      <section style={{ ...styles.section, paddingTop: 20, paddingBottom: 40 }}>
+        <ScrollFade style={{ textAlign: 'center' }}>
+          <div style={{ ...styles.sectionLabel, justifyContent: 'center', display: 'flex' }}>O QUE A IA VAI FAZER POR VOCÊ</div>
+        </ScrollFade>
+        <OrbitDiagram />
       </section>
 
       {/* COUNTDOWN */}
       <section style={{ ...styles.section, ...styles.countdownSection }}>
-        <Reveal className="revealBlock">
+        <ScrollFade>
           <div style={styles.sectionLabel}>{cd.ended ? 'AO VIVO AGORA' : 'A JANELA FECHA EM'}</div>
           <div className="countdownGrid" style={styles.countdownGrid}>
             {[
@@ -251,14 +296,16 @@ export default function MoveAIPage() {
               </div>
             ))}
           </div>
-          <div style={styles.countdownNote}>Vagas limitadas · valor de R$ 2,00 só até o início do Intensivão.</div>
-        </Reveal>
+          <div style={styles.countdownNote}>
+            Vagas limitadas · valor de <strong style={{ color: CREAM }}>R$ 2,00</strong> só até o início do Intensivão.
+          </div>
+        </ScrollFade>
       </section>
 
       {/* CONVITE / SHARE */}
       <section style={styles.section}>
         <div className="inviteGrid" style={styles.inviteGrid}>
-          <Reveal className="revealBlock">
+          <ScrollFade>
             <div style={styles.sectionLabel}>O CONVITE</div>
             <h2 style={styles.h2}>
               <span style={{ color: CREAM }}>ESSE É O CONVITE QUE </span>
@@ -266,22 +313,23 @@ export default function MoveAIPage() {
             </h2>
             <p style={styles.bodyText}>
               Print, encaminhe ou mostre pra quem ainda tá adiando a decisão de usar IA no dia a dia.
-              Todo mundo que chegar até o grupo secreto do WhatsApp entra com o mesmo acesso: R$ 2,00 pelos 3 dias ao vivo.
+              Todo mundo que chegar até o <strong style={{ color: CREAM, fontWeight: 700 }}>grupo secreto do WhatsApp</strong> entra
+              com o mesmo acesso: <strong style={{ color: CREAM, fontWeight: 700 }}>R$ 2,00</strong> pelos 3 dias ao vivo.
             </p>
             <a href={WHATSAPP_LINK} style={{ ...styles.ctaButton, marginTop: 8 }}>ENTRAR NO GRUPO →</a>
-          </Reveal>
-          <Reveal delay={150} className="revealBlock" style={{ display: 'flex', justifyContent: 'center' }}>
+          </ScrollFade>
+          <ScrollFade offset={0.08} style={{ display: 'flex', justifyContent: 'center' }}>
             <div style={styles.phoneFrame}>
               <div style={styles.phoneNotch} />
               <img src="/moveai/flyer-original.png" alt="Convite Intensivão MoveAI" style={styles.phoneImg} />
             </div>
-          </Reveal>
+          </ScrollFade>
         </div>
       </section>
 
       {/* FINAL CTA */}
       <section style={styles.finalSection}>
-        <Reveal className="revealBlock" style={{ textAlign: 'center' }}>
+        <ScrollFade style={{ textAlign: 'center' }}>
           <h2 style={{ ...styles.h2, textAlign: 'center' }}>
             <span style={{ color: CREAM }}>O MERCADO NÃO ESPERA. </span>
             <span style={{ color: ORANGE }}>ELE SUBSTITUI.</span>
@@ -289,7 +337,7 @@ export default function MoveAIPage() {
           <div style={styles.finalPrice}>R$ 2,00</div>
           <a href={WHATSAPP_LINK} style={{ ...styles.ctaButton, ...styles.ctaButtonLg }}>GARANTA SUA VAGA →</a>
           <div style={styles.ctaSub}>24, 25 e 26 de julho · 19h30 · ao vivo no grupo secreto do WhatsApp</div>
-        </Reveal>
+        </ScrollFade>
       </section>
 
       {/* FOOTER */}
@@ -309,13 +357,6 @@ export default function MoveAIPage() {
         .fadeIn { transform: translateY(0) scale(0.96); }
         .fadeUp.in, .fadeIn.in { opacity: 1; transform: translateY(0) scale(1); }
 
-        .reveal {
-          opacity: 0;
-          transform: translateY(28px);
-          transition: opacity .7s cubic-bezier(.22,.61,.36,1), transform .7s cubic-bezier(.22,.61,.36,1);
-        }
-        .reveal--visible { opacity: 1; transform: translateY(0); }
-
         a[href] { text-decoration: none; }
         a[href]:hover { filter: brightness(1.08); }
 
@@ -331,19 +372,25 @@ export default function MoveAIPage() {
         .countdownNum { animation: tick-pop .4s ease-out; }
 
         .heroGrid { grid-template-columns: 1.05fr 0.95fr; }
-        .cardsGrid { grid-template-columns: repeat(3, 1fr); }
         .inviteGrid { grid-template-columns: 1fr 1fr; }
 
         @media (max-width: 860px) {
           .heroGrid { grid-template-columns: 1fr; }
           .heroGrid > div:last-child { order: -1; }
-          .cardsGrid { grid-template-columns: 1fr; }
           .inviteGrid { grid-template-columns: 1fr; }
           .inviteGrid > div:last-child { order: -1; }
         }
 
         @media (max-width: 480px) {
           .countdownGrid { gap: 8px; }
+        }
+
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes spin-reverse { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
+        .orbitRing { --orbit-r: 128px; animation: spin 32s linear infinite; }
+        .orbitLabel { animation: spin-reverse 32s linear infinite; }
+        @media (max-width: 560px) {
+          .orbitRing { --orbit-r: 90px; }
         }
       `}</style>
     </div>
@@ -355,6 +402,76 @@ function TickerContent() {
     <span style={styles.tickerSpan}>
       VAGAS LIMITADAS&nbsp;&nbsp;•&nbsp;&nbsp;24–26 DE JULHO&nbsp;&nbsp;•&nbsp;&nbsp;R$ 2,00&nbsp;&nbsp;•&nbsp;&nbsp;AO VIVO ÀS 19H30&nbsp;&nbsp;•&nbsp;&nbsp;
     </span>
+  );
+}
+
+// Pinned card that swaps content on its own timer, sliding the incoming slide in from the
+// right while the outgoing one exits left — same mechanic as the sticky insight-card carousel
+// found in the reference (pin + timed auto-advance, not a plain grid).
+function ValueCarousel() {
+  const [wrapRef, active, setActive] = useAutoAdvance(VALUE_PROPS.length, 2200);
+  const n = VALUE_PROPS.length;
+
+  return (
+    <div style={styles.carouselWrap}>
+      <div ref={wrapRef} style={styles.carouselSticky}>
+        <div style={styles.carouselCardOuter}>
+          {VALUE_PROPS.map((v, i) => {
+            const rel = (i - active + n) % n;
+            const x = rel === 0 ? 0 : rel === 1 ? 100 : -100;
+            return (
+              <div
+                key={v.title}
+                style={{
+                  ...styles.carouselSlide,
+                  transform: `translateX(${x}%)`,
+                  opacity: rel === 0 ? 1 : 0,
+                }}
+              >
+                <div style={styles.cardIndex}>{pad(i + 1)}</div>
+                <div style={styles.cardTitle}>{v.title}</div>
+                <div style={styles.cardText}>{v.text}</div>
+              </div>
+            );
+          })}
+        </div>
+        <div style={styles.carouselDots}>
+          {VALUE_PROPS.map((v, i) => (
+            <button
+              key={v.title}
+              aria-label={v.title}
+              onClick={() => setActive(i)}
+              style={{ ...styles.carouselDot, ...(i === active ? styles.carouselDotActive : {}) }}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Central MoveAI mark with the 5 capability labels revolving around it — a continuous CSS
+// rotation that plays regardless of scroll, mirroring the always-on partner-logo orbit found
+// in the reference. The ring spins; each label counter-spins so the text stays upright.
+function OrbitDiagram() {
+  const n = ORBIT_ITEMS.length;
+  return (
+    <div style={styles.orbitWrap}>
+      <div className="orbitRing" style={styles.orbitRing}>
+        {ORBIT_ITEMS.map((label, i) => {
+          const angle = (360 / n) * i;
+          return (
+            <div
+              key={label}
+              style={{ ...styles.orbitNode, transform: `rotate(${angle}deg) translate(var(--orbit-r)) rotate(${-angle}deg)` }}
+            >
+              <div className="orbitLabel" style={styles.orbitLabel}>{label}</div>
+            </div>
+          );
+        })}
+      </div>
+      <img src="/moveai/logo-icon.png" alt="MoveAI" style={styles.orbitCenter} />
+    </div>
   );
 }
 
@@ -448,14 +565,43 @@ const styles = {
   h2: { fontFamily: "'Oswald', sans-serif", fontWeight: 700, fontSize: 'clamp(28px, 4vw, 46px)', lineHeight: 1.12, margin: '0 0 40px', maxWidth: 760 },
   bodyText: { fontSize: 16, lineHeight: 1.7, color: CREAM, opacity: 0.82, maxWidth: 460, marginBottom: 24 },
 
-  cardsGrid: { display: 'grid', gap: 20 },
-  card: {
-    background: 'rgba(239,235,224,0.03)', border: '1px solid rgba(239,235,224,0.1)', borderRadius: 16,
-    padding: '28px 24px', height: '100%', boxSizing: 'border-box',
-  },
   cardIndex: { fontFamily: "'Space Mono', monospace", fontSize: 12, color: ORANGE, marginBottom: 18, letterSpacing: 1 },
   cardTitle: { fontFamily: "'Oswald', sans-serif", fontWeight: 700, fontSize: 22, color: CREAM, marginBottom: 10, letterSpacing: 0.5 },
   cardText: { fontSize: 14.5, lineHeight: 1.6, color: CREAM, opacity: 0.72 },
+
+  carouselWrap: { position: 'relative', minHeight: '110vh' },
+  carouselSticky: { position: 'sticky', top: '16vh', display: 'flex', flexDirection: 'column', alignItems: 'center' },
+  carouselCardOuter: {
+    position: 'relative', width: '100%', maxWidth: 640, minHeight: 230, overflow: 'hidden',
+    background: 'rgba(239,235,224,0.03)', border: '1px solid rgba(239,235,224,0.1)', borderRadius: 16,
+  },
+  carouselSlide: {
+    position: 'absolute', inset: 0, padding: '30px 28px', display: 'flex', flexDirection: 'column',
+    justifyContent: 'center', boxSizing: 'border-box',
+    transition: 'transform .6s cubic-bezier(.65,0,.35,1), opacity .5s ease',
+  },
+  carouselDots: { display: 'flex', gap: 10, marginTop: 22 },
+  carouselDot: {
+    width: 9, height: 9, borderRadius: '50%', border: 'none', cursor: 'pointer',
+    background: 'rgba(239,235,224,0.25)', padding: 0,
+  },
+  carouselDotActive: { background: ORANGE, boxShadow: `0 0 10px ${ORANGE}` },
+
+  orbitWrap: { position: 'relative', width: 300, height: 300, margin: '30px auto 0' },
+  orbitRing: { position: 'absolute', inset: 0 },
+  orbitNode: {
+    position: 'absolute', top: '50%', left: '50%', width: 118, height: 40, marginTop: -20, marginLeft: -59,
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+  },
+  orbitLabel: {
+    fontFamily: "'Space Mono', monospace", fontSize: 11, letterSpacing: 1.5, color: ORANGE,
+    background: 'rgba(217,106,50,0.1)', border: `1px solid ${ORANGE}55`, borderRadius: 100,
+    padding: '7px 14px', whiteSpace: 'nowrap',
+  },
+  orbitCenter: {
+    position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+    height: 54, width: 'auto', filter: `drop-shadow(0 0 16px ${ORANGE}88)`,
+  },
 
   bonusBox: {
     marginTop: 20, background: 'rgba(20,58,61,0.35)', border: `1px solid ${TEAL}`, borderRadius: 14,
