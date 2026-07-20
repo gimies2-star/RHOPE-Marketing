@@ -85,16 +85,16 @@ function useScrollY() {
 
 const VALUE_PROPS = [
   {
-    title: 'DELEGUE',
-    text: 'Pare de fazer tudo sozinho. Aprenda a transferir tarefas repetitivas para a IA hoje mesmo.',
+    title: 'PERGUNTAR',
+    text: 'Foi a primeira fase, e você já sabe fazer isso. O problema é que perguntar sozinho não escala mais.',
   },
   {
-    title: 'AUTOMATIZE',
-    text: 'Monte fluxos que trabalham por você, todos os dias, sem depender da sua atenção.',
+    title: 'DELEGAR',
+    text: 'A IA pesquisa, compara, organiza e monitora por você — em tempo real, sem você acompanhar cada passo.',
   },
   {
-    title: 'MULTIPLIQUE',
-    text: 'Escale sua produtividade sem precisar contratar mais gente para operar.',
+    title: 'AUTOMATIZAR',
+    text: 'Ela executa a tarefa inteira sozinha. É isso que separa quem usa IA de quem só conversa com ela.',
   },
 ];
 
@@ -132,6 +132,10 @@ export default function MoveAIPage() {
         <div className="heroGrid" style={styles.heroGrid}>
           <div style={styles.heroLeft}>
             <div className={`fadeUp ${heroIn ? 'in' : ''}`} style={{ transitionDelay: '0ms' }}>
+              <p style={styles.kicker}>Tá na hora da IA ajudar você. Não só as empresas.</p>
+            </div>
+
+            <div className={`fadeUp ${heroIn ? 'in' : ''}`} style={{ transitionDelay: '90ms' }}>
               <div style={styles.eyebrow}>
                 <span style={styles.eyebrowDot} />
                 MOVEAI · INTENSIVÃO AO VIVO
@@ -139,29 +143,32 @@ export default function MoveAIPage() {
             </div>
 
             <h1 style={styles.h1}>
-              <span className={`fadeUp ${heroIn ? 'in' : ''}`} style={{ transitionDelay: '90ms' }}>
+              <span className={`fadeUp ${heroIn ? 'in' : ''}`} style={{ transitionDelay: '180ms' }}>
                 <span style={{ color: CREAM }}>INTENSIVÃO DE</span>
               </span>
-              <span className={`fadeUp ${heroIn ? 'in' : ''}`} style={{ transitionDelay: '180ms' }}>
+              <span className={`fadeUp ${heroIn ? 'in' : ''}`} style={{ transitionDelay: '270ms' }}>
                 <span style={{ color: CREAM }}>PRODUTIVIDADE</span>
               </span>
-              <span className={`fadeUp ${heroIn ? 'in' : ''}`} style={{ transitionDelay: '270ms' }}>
+              <span className={`fadeUp ${heroIn ? 'in' : ''}`} style={{ transitionDelay: '360ms' }}>
                 <span style={{ color: ORANGE }}>COM IA</span>
               </span>
             </h1>
 
-            <div className={`fadeUp ${heroIn ? 'in' : ''}`} style={{ transitionDelay: '360ms' }}>
-              <p style={styles.subhead}>Pare de perguntar. Comece a delegar e automatizar.</p>
+            <div className={`fadeUp ${heroIn ? 'in' : ''}`} style={{ transitionDelay: '450ms' }}>
+              <p style={styles.subhead}>
+                Pare de perguntar. Comece a delegar e automatizar. Não é uma aula sobre ChatGPT —
+                é uma nova forma de trabalhar com IA.
+              </p>
             </div>
 
-            <div className={`fadeUp ${heroIn ? 'in' : ''}`} style={{ transitionDelay: '450ms' }}>
+            <div className={`fadeUp ${heroIn ? 'in' : ''}`} style={{ transitionDelay: '540ms' }}>
               <div style={styles.dateBadge}>
                 <div style={styles.dateBadgeMain}>24, 25 E 26 DE JULHO</div>
                 <div style={styles.dateBadgeSub}>3 DIAS AO VIVO · 19H30</div>
               </div>
             </div>
 
-            <div className={`fadeUp ${heroIn ? 'in' : ''}`} style={{ transitionDelay: '540ms' }}>
+            <div className={`fadeUp ${heroIn ? 'in' : ''}`} style={{ transitionDelay: '630ms' }}>
               <div style={styles.priceBlock}>
                 <div style={styles.priceLabel}>POR APENAS</div>
                 <div style={styles.priceValue}>R$ 2,00</div>
@@ -169,7 +176,7 @@ export default function MoveAIPage() {
               </div>
             </div>
 
-            <div className={`fadeUp ${heroIn ? 'in' : ''}`} style={{ transitionDelay: '630ms' }}>
+            <div className={`fadeUp ${heroIn ? 'in' : ''}`} style={{ transitionDelay: '720ms' }}>
               <a href={WHATSAPP_LINK} style={styles.ctaButton}>GARANTA SUA VAGA →</a>
               <div style={styles.ctaSub}>Vagas limitadas para o grupo secreto no WhatsApp</div>
             </div>
@@ -197,10 +204,10 @@ export default function MoveAIPage() {
       {/* VALUE PROPS */}
       <section style={styles.section}>
         <Reveal className="revealBlock">
-          <div style={styles.sectionLabel}>POR QUE ISSO IMPORTA AGORA</div>
+          <div style={styles.sectionLabel}>A DIFERENÇA QUE MUDA TUDO</div>
           <h2 style={styles.h2}>
-            <span style={{ color: CREAM }}>3 DIAS PARA MUDAR </span>
-            <span style={{ color: ORANGE }}>COMO VOCÊ TRABALHA</span>
+            <span style={{ color: CREAM }}>VOCÊ VAI ENTENDER A DIFERENÇA ENTRE </span>
+            <span style={{ color: ORANGE }}>PERGUNTAR, DELEGAR E AUTOMATIZAR</span>
           </h2>
         </Reveal>
 
@@ -215,6 +222,16 @@ export default function MoveAIPage() {
             </Reveal>
           ))}
         </div>
+
+        <Reveal delay={120}>
+          <div style={styles.bonusBox}>
+            <div style={styles.bonusLabel}>// BÔNUS · CERTIFICADO</div>
+            <div style={styles.bonusText}>
+              Cada um dos 3 dias libera uma palavra-chave. Junte as três e destrave seu
+              certificado de participação no dia 29/07.
+            </div>
+          </div>
+        </Reveal>
       </section>
 
       {/* COUNTDOWN */}
@@ -383,6 +400,10 @@ const styles = {
   },
   heroGrid: { display: 'grid', gap: 40, alignItems: 'center', position: 'relative' },
   heroLeft: {},
+  kicker: {
+    fontFamily: "'Oswald', sans-serif", fontWeight: 500, fontSize: 'clamp(16px, 1.6vw, 20px)',
+    color: CREAM, opacity: 0.9, marginBottom: 16, maxWidth: 480, lineHeight: 1.3,
+  },
   eyebrow: {
     fontFamily: "'Space Mono', monospace", fontSize: 12, letterSpacing: 3, color: ORANGE,
     display: 'flex', alignItems: 'center', gap: 10, marginBottom: 22, textTransform: 'uppercase',
@@ -435,6 +456,13 @@ const styles = {
   cardIndex: { fontFamily: "'Space Mono', monospace", fontSize: 12, color: ORANGE, marginBottom: 18, letterSpacing: 1 },
   cardTitle: { fontFamily: "'Oswald', sans-serif", fontWeight: 700, fontSize: 22, color: CREAM, marginBottom: 10, letterSpacing: 0.5 },
   cardText: { fontSize: 14.5, lineHeight: 1.6, color: CREAM, opacity: 0.72 },
+
+  bonusBox: {
+    marginTop: 20, background: 'rgba(20,58,61,0.35)', border: `1px solid ${TEAL}`, borderRadius: 14,
+    padding: '22px 26px',
+  },
+  bonusLabel: { fontFamily: "'Space Mono', monospace", fontSize: 12, letterSpacing: 1.5, color: '#5FBFC4', marginBottom: 8 },
+  bonusText: { fontSize: 15, lineHeight: 1.6, color: CREAM, opacity: 0.88, maxWidth: 620 },
 
   countdownSection: { background: 'rgba(20,58,61,0.18)', borderTop: '1px solid rgba(239,235,224,0.08)', borderBottom: '1px solid rgba(239,235,224,0.08)' },
   countdownGrid: { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14, maxWidth: 520, margin: '0 auto' },
