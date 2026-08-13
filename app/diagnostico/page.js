@@ -319,8 +319,8 @@ export default function DiagnosticoPage() {
       <section className="dg-founder">
         <div className="dg-founder-wrap">
           <div className="dg-founder-card dg-rv">
+            <img src="/diagnostico/gian-portrait.jpg" alt="Gian Esperança" className="dg-founder-photo" />
             <div className="dg-founder-grid" />
-            <div className="dg-founder-mono">G</div>
             <div className="dg-founder-glow" />
             <div className="dg-founder-badge">Estrategista Digital · Fundador</div>
           </div>
