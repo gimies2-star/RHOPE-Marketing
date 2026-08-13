@@ -51,7 +51,7 @@
 /* ---------- NAV ---------- */
 .dg-nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;
   padding:22px 64px;transition:all .45s var(--ease);}
-.dg-nav.stuck{padding:14px 64px;background:rgba(10,10,10,.92);border-bottom:1px solid var(--border);backdrop-filter:blur(20px);}
+.dg-nav.stuck{padding-top:14px;padding-bottom:14px;background:rgba(10,10,10,.92);border-bottom:1px solid var(--border);backdrop-filter:blur(20px);}
 .dg-nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none;}
 .dg-nav-mark{width:34px;height:auto;filter:drop-shadow(0 2px 10px rgba(217,106,50,.35));}
 .dg-nav-word{font-family:var(--f-display);font-weight:700;font-size:1.3rem;letter-spacing:.1em;color:var(--text);}
@@ -275,7 +275,10 @@
 /* ---------- MOBILE ---------- */
 @media(max-width:960px){
   .dg-container,.dg-nav,.dg-hero,.dg-section,.dg-teaser,.dg-manifesto,.dg-stats,.dg-founder,.dg-pillars,.dg-testi,.dg-faq,.dg-final,.dg-footer{padding-left:22px;padding-right:22px;}
-  .dg-nav{padding-top:16px;padding-bottom:16px;}
+  .dg-nav{padding-top:16px;padding-bottom:16px;gap:12px;}
+  .dg-nav.stuck{padding-top:12px;padding-bottom:12px;}
+  .dg-nav-word{font-size:1.05rem;}
+  .dg-nav-cta{padding:9px 16px;font-size:.62rem;letter-spacing:.06em;}
   .dg-hero{padding-top:120px;padding-bottom:60px;}
   .dg-hero-in{grid-template-columns:1fr;gap:36px;}
   .dg-h1{font-size:clamp(2.1rem,9vw,3rem);max-width:100%;}
