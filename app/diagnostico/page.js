@@ -78,6 +78,12 @@ function waLink(text) {
   return `https://wa.me/${WHATS}?text=${encodeURIComponent(text)}`;
 }
 
+function trackPixel(event, params) {
+  if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
+    window.fbq('track', event, params);
+  }
+}
+
 export default function DiagnosticoPage() {
   const [stuck, setStuck] = useState(false);
   const [openFaq, setOpenFaq] = useState(0);
@@ -137,6 +143,7 @@ export default function DiagnosticoPage() {
       `Empresa: ${form.empresa}\n` +
       `E-mail: ${form.email || 'Não informado'}\n` +
       `WhatsApp: ${form.whats}`;
+    trackPixel('Lead', { content_name: 'diagnostico_hero_form' });
     window.open(waLink(msg), '_blank');
   }
 
@@ -157,7 +164,8 @@ export default function DiagnosticoPage() {
           <img src="/diagnostico/rhope-mark.png" alt="Rhope" className="dg-nav-mark" />
           <span className="dg-nav-word">RHOPE</span>
         </a>
-        <a href={waLink('Olá! Quero fazer o diagnóstico gratuito da Rhope.')} target="_blank" rel="noreferrer" className="dg-nav-cta">
+        <a href={waLink('Olá! Quero fazer o diagnóstico gratuito da Rhope.')} target="_blank" rel="noreferrer" className="dg-nav-cta"
+          onClick={() => trackPixel('Contact', { content_name: 'nav_cta' })}>
           Diagnóstico gratuito
         </a>
       </nav>
@@ -335,7 +343,8 @@ export default function DiagnosticoPage() {
               <div><div className="dg-fstat-v">R$3M+</div><div className="dg-fstat-l">Em vendas geradas</div></div>
               <div><div className="dg-fstat-v">1H</div><div className="dg-fstat-l">Diagnóstico gratuito</div></div>
             </div>
-            <a href={waLink('Olá Gian! Quero agendar meu diagnóstico gratuito.')} target="_blank" rel="noreferrer" className="dg-btn-p">
+            <a href={waLink('Olá Gian! Quero agendar meu diagnóstico gratuito.')} target="_blank" rel="noreferrer" className="dg-btn-p"
+              onClick={() => trackPixel('Contact', { content_name: 'founder_cta' })}>
               Falar com o Gian agora →
             </a>
           </div>
@@ -420,7 +429,8 @@ export default function DiagnosticoPage() {
           <h2 className="dg-final-h2">Sua empresa vai virar a chave<br /><span className="o">— ou vai ficar pra trás?</span></h2>
           <p className="dg-final-sub">1 hora. Grátis. Sem comprar nada. Escolha um dos botões abaixo: ajude o seu negócio, ajude o de um amigo empresário — ou os dois.</p>
           <div className="dg-final-btns">
-            <a href={waLink('Olá Gian! Quero fazer o diagnóstico gratuito da Rhope.')} target="_blank" rel="noreferrer" className="dg-btn-p">
+            <a href={waLink('Olá Gian! Quero fazer o diagnóstico gratuito da Rhope.')} target="_blank" rel="noreferrer" className="dg-btn-p"
+              onClick={() => trackPixel('Contact', { content_name: 'final_cta' })}>
               Quero meu diagnóstico gratuito →
             </a>
             <button onClick={indicarAmigo} className="dg-btn-g" style={{ cursor: 'pointer' }}>
